@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+/* Regra global para o fundo escuro */
+body {
+  background-color: #121214; /* Cor escura do fundo */
+  color: white;
+}
