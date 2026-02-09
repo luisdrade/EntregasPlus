@@ -1,0 +1,23 @@
+# ========================
+# segurança
+# ========================
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+backend/sistema/local_settings.py
+
+# ========================
+# python e Django
+# ========================
+__pycache__/
+*.py[cod]
+*$py.class
+backend/venv/
+env/
+.venv/
+db.sqlite3
+db.sqlite3-journal
+/backend/media/
+/backend/staticfiles/
