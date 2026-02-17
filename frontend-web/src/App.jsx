@@ -1,7 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LandingPage } from "./app/pages/LandingPage";
-import { RegisterPage } from "./app/pages/RegisterPage";
 import { AuthPage } from "./app/pages/AuthPage";
+
+//import { RegisterPage } from "./app/pages/RegisterPage";
 //import { Login } from "./pages/Login";
 
 function App() {

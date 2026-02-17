@@ -20,7 +20,7 @@ class UsuarioManager(BaseUserManager):
 class Entregador(AbstractBaseUser, PermissionsMixin):
     nome = models.CharField(max_length=100)
     cpf = models.CharField(max_length=14, unique=True, null=True, blank=True)
-    telefone = models.CharField(max_length=20)
+    telefone = models.CharField(max_length=20, null=True, blank=True)
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=150, unique=True, blank=True, null=True)
     data_nascimento = models.DateField(null=True, blank=True)

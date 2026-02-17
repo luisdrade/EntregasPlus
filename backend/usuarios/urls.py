@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from . import views
-from .views import EntregadorMeView, TestView, EstatisticasUsuarioView, UploadFotoPerfilView
+from . import _viewsBackup
+from ._viewsBackup import EntregadorMeView, TestView, EstatisticasUsuarioView, UploadFotoPerfilView
 from .auth.auth_views import (
     LoginView,
     RegisterView,
@@ -27,7 +27,7 @@ from .admin_views import AdminUsersAPIView, AdminStatsAPIView
 app_name = 'usuarios'
 
 router = DefaultRouter()
-router.register(r'entregadores', views.EntregadorViewSet)
+router.register(r'entregadores', _viewsBackup.EntregadorViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
@@ -61,10 +61,10 @@ urlpatterns = [
     path('entregadores/me/', EntregadorMeView.as_view(), name='entregador_me'),
     
     # Endpoint para verificar username (mantido para compatibilidade)
-    path('check-username/<str:username>/', views.check_username, name='check_username'),
+    path('check-username/<str:username>/', _viewsBackup.check_username, name='check_username'),
     
     # Endpoint para alterar senha
-    path('change-password/<int:pk>/', views.change_password, name='change_password'),
+    path('change-password/<int:pk>/', _viewsBackup.change_password, name='change_password'),
     
     # Endpoint para estatísticas do usuário
     path('estatisticas/', EstatisticasUsuarioView.as_view(), name='estatisticas_usuario'),
@@ -73,8 +73,8 @@ urlpatterns = [
     path('usuarios/upload-foto/', UploadFotoPerfilView.as_view(), name='upload_foto_perfil'),
     
     # Endpoints de relatórios
-    path('relatorios/trabalho/', views.relatorio_trabalho, name='relatorio_trabalho'),
-    path('relatorios/despesas/', views.relatorio_despesas, name='relatorio_despesas'),
+    path('relatorios/trabalho/', _viewsBackup.relatorio_trabalho, name='relatorio_trabalho'),
+    path('relatorios/despesas/', _viewsBackup.relatorio_despesas, name='relatorio_despesas'),
     
     # Endpoints de administração (apenas para admin)
     path('admin/users/', AdminUsersAPIView.as_view(), name='admin_users'),

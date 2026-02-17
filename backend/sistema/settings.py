@@ -14,7 +14,7 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ==========================================
-# Parte da Segurança
+#? Parte da Segurança
 # ==========================================
 SECRET_KEY = 'django-insecure-2i=3+vb$*ttsb%&9g7w%2tyi#^qniy-v@ljb)83d8zc!8@8!26'
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
@@ -23,7 +23,7 @@ ALLOWED_HOSTS = ['*'] # Receber todos os links
 
 
 # ==========================================
-# APlicativos
+#? APlicativos
 # ==========================================
 
 INSTALLED_APPS = [
@@ -87,7 +87,7 @@ WSGI_APPLICATION = 'sistema.wsgi.application'
 
 
 # =========================================================
-# Banco de Dados
+#? Banco de Dados
 # =========================================================
 DATABASES = {
     'default': {
@@ -98,14 +98,16 @@ DATABASES = {
 
 
 # =========================================================
-# Autenticação #bem importante
+#? Autenticação **bem importante
 # =========================================================
 AUTH_USER_MODEL = 'usuarios.Entregador'
 
 #dar uma olhada se ta instalado
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication'
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
@@ -140,7 +142,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # =========================================================
-# Internacionalização
+#? Internacionalização
 # =========================================================
 LANGUAGE_CODE = 'pt-br'
 TIME_ZONE = 'America/Sao_Paulo'
@@ -149,7 +151,7 @@ USE_TZ = True
 
 
 # =========================================================
-# Estaticos e Mídia (CSS, JavaScript, Images)
+#? Estaticos e Mídia (CSS, JavaScript, Images)
 # ========================================================
 STATIC_URL = 'static/'
 STATIC_ROOT =  BASE_DIR /  'staticfiles'
@@ -159,7 +161,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # =========================================================
-# E-mail 
+#? E-mail 
 # =========================================================
 # Configuração para ler do .env
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -171,7 +173,7 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # =========================================================
-# CORS (Para usar em React) #!ver se tá instalado 
+#? CORS (Para usar em React) 
 # ========================================================
 CORS_ALLOW_ALL_ORIGINS = True 
 CORS_ALLOW_CREDENTIALS = True

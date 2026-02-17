@@ -30,12 +30,20 @@ export function Hero() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="gap-2 text-lg h-12 px-8">
-                Começar Agora <ArrowRight size={20} />
-              </Button>
-              <Button variant="outline" size="lg" className="text-lg h-12 px-8">
-                Saiba Mais
-              </Button>
+              <Link to="/">
+                <Button size="lg" className="gap-2 text-lg h-12 px-8">
+                  Começar Agora <ArrowRight size={20} />
+                </Button>
+              </Link>
+              <a href="#features">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="text-lg h-12 px-8"
+                >
+                  Saiba Mais
+                </Button>
+              </a>
             </div>
           </motion.div>
 
