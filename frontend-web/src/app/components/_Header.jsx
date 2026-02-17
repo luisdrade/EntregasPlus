@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Button } from "./ui/_button";
 import { Link } from "react-router-dom";
 
+
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -36,9 +37,13 @@ export function Header() {
             </a>
             <div className="flex items-center gap-3">
               <Link to="/">
-                <Button variant="ghost" className="px-6 py-2">Entrar</Button>
+                <Button variant="ghost" className="px-6 py-2">
+                  Entrar
+                </Button>
               </Link>
-              <Button className="px-6 py-2">Cadastrar</Button>
+              <Link to="/register">
+                <Button className="px-6 py-2">Cadastrar</Button>
+              </Link>
             </div>
           </nav>
 

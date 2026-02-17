@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LandingPage } from "./app/pages/LandingPage";
+import { RegisterPage } from "./app/pages/RegisterPage";
+import { AuthPage } from "./app/pages/AuthPage";
 //import { Login } from "./pages/Login";
 
 function App() {
@@ -11,6 +13,8 @@ function App() {
 
         {/* A rota de login separada <Route path="/login" element={<Login />} /> */}
         
+        <Route path="/login" element={<AuthPage/>}/>
+        <Route path="/register" element={<AuthPage/>}/>
         {/* Futuramente: <Route path="/dashboard" element={<Dashboard />} /> */}
       </Routes>
     </BrowserRouter>

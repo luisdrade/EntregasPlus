@@ -67,6 +67,10 @@
   }
 }
 
+html{
+  scroll-behavior: smooth;
+}
+
 /* Regra global para o fundo escuro */
 body {
   background-color: var(--background);
