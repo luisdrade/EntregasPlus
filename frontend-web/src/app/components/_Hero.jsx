@@ -1,6 +1,8 @@
 import { ArrowRight, Smartphone } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "./ui/_button";
+import { Link } from "react-router-dom";
+import { HashLink } from "react-router-hash-link";
 
 export function Hero() {
   return (
@@ -30,12 +32,12 @@ export function Hero() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link to="/">
+              <Link to="/login">
                 <Button size="lg" className="gap-2 text-lg h-12 px-8">
                   Começar Agora <ArrowRight size={20} />
                 </Button>
               </Link>
-              <a href="#features">
+              <HashLink href="#features">
                 <Button
                   variant="outline"
                   size="lg"
@@ -43,7 +45,7 @@ export function Hero() {
                 >
                   Saiba Mais
                 </Button>
-              </a>
+              </HashLink>
             </div>
           </motion.div>
 

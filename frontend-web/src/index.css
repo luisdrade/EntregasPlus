@@ -1,3 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 @import "tailwindcss";
 
 @theme {
@@ -23,6 +26,7 @@
   --radius: 0.75rem;
 }
 
+@layer {
 :root {
   --background: #EDede7;
   --foreground: #2B285F;
@@ -44,9 +48,7 @@
   --input: #e2e2e2;
   --ring: #2B285F;
 }
-
-@media (prefers-color-scheme: dark){
-  :root{
+ .dark, :root{
     --background: #121214;
     --foreground: #EDEDE7;
     --card: #202024;
@@ -64,6 +66,17 @@
     --border: #323238;
     --input: #323238;
     --ring: #8257e5;
+  }
+}
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground transition-colors duration-300;
+  }
+  html {
+    scroll-behavior: smooth;
   }
 }
 

@@ -69,7 +69,7 @@ export function AuthPage() {
         // Configura o token padrão para as próximas requisições
         api.defaults.headers.Authorization = `Bearer ${response.data.access}`;
 
-        navigate("/"); // Sucesso! Vai para a Home
+        navigate("/dashboard"); // Sucesso! Vai para a Home
       } else {
         //* --- REGISTRO --- (Acessa o /api/register)
 
@@ -273,7 +273,7 @@ export function AuthPage() {
           <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
 
           <div className="relative z-10 max-w-sm">
-            <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center mb-8 mx-auto backdrop-blur-sm border border-white/30">
+            <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center mb-8 mx-auto backdrop-blur-sm border-none">
               <Truck size={40} className="text-white" />
             </div>
 

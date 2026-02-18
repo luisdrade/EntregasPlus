@@ -6,13 +6,15 @@ import { Footer } from "../components/_Footer";
 import { Link } from "react-router-dom";
 import React from "react";
 
-
 export function LandingPage() {
   return (
-    <div className="landing-page">
+    <div
+      id="top"
+      className="min-h-screen bg-background text-foreground flex flex-col font-sans"
+    >
+      {" "}
       {/* 1. CABEÇALHO (Header) */}
       <Header />
-
       <main>
         {/* 2. SEÇÃO HERO */}
         <Hero />
@@ -20,7 +22,6 @@ export function LandingPage() {
         {/* 3. SEÇÃO DE RECURSOS */}
         <Features />
       </main>
-
       {/* 4. RODAPÉ */}
       <Footer />
     </div>
