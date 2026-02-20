@@ -1,4 +1,6 @@
 import React from "react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   DollarSign,
   TrendingUp,
@@ -7,33 +9,65 @@ import {
   Package,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import api from "../../services/api";
 
 export function Dashboard() {
+  const [statsData, setStatsData] = useState(null);
+  const [ultimasEntregas, setUltimasEntregas] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // 1. Função para formatar dinheiro (Reais)
+  const formatarMoeda = (valor) => {
+    return Number(valor || 0).toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    });
+  };
+
+  useEffect(() => {
+    async function carregarDashboard(params) {
+      try {
+        setLoading(true);
+
+        const respStas = await api.get("/relatorios/estatisticas/?periodo=mes");
+        setStatsData(respStas.data);
+
+        const respTrabalhos = await api.get("/financeiro/trabalho/");
+        setUltimasEntregas(respTrabalhos.data.results.slice(0, 4));
+      } catch (error) {
+        console.error("Erro ao carregar dashboard", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    carregarDashboard();
+  }, []);
+
   const stats = [
     {
-      title: "Ganhos Hoje",
-      value: "R$ 124,50",
+      title: "Lucro Líquido (Mês)",
+      value: formatarMoeda(statsData?.lucroLiquido),
       icon: DollarSign,
+      color: "text-primary",
+      bg: "bg-primary/10",
+    },
+    {
+      title: "Ganhos (Mês)",
+      value: formatarMoeda(statsData?.totalGanhos),
+      icon: TrendingUp,
       color: "text-green-500",
       bg: "bg-green-500/10",
     },
     {
-      title: "Ganhos Mês",
-      value: "R$ 3.450,00",
-      icon: TrendingUp,
-      color: "text-blue-500",
-      bg: "bg-blue-500/10",
-    },
-    {
-      title: "Despesas Mês",
-      value: "R$ 890,00",
+      title: "Despesas (Mês)",
+      value: formatarMoeda(statsData?.totalDespesas),
       icon: TrendingDown,
       color: "text-red-500",
       bg: "bg-red-500/10",
     },
     {
-      title: "Entregas Realizadas",
-      value: "142",
+      title: "Total de Pacotes (Mês)",
+      value: statsData?.totalEntregas || 0,
       icon: Package,
       color: "text-violet-500",
       bg: "bg-violet-500/10",
