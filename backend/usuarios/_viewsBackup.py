@@ -209,7 +209,7 @@ class EstatisticasUsuarioView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        from relatorios_dashboard.api_views import EstatisticasUsuarioView as NovaView
+        from backend.relatorios_dashboard.__api_viewsBackup import EstatisticasUsuarioView as NovaView
         return NovaView.as_view()(request._request)
 
 
@@ -217,7 +217,7 @@ class EstatisticasUsuarioView(APIView):
 @permission_classes([IsAuthenticated])
 def relatorio_trabalho(request):
     """Relatório de trabalho - delega para relatorios_dashboard"""
-    from relatorios_dashboard.api_views import relatorio_trabalho as nova_func
+    from backend.relatorios_dashboard.__api_viewsBackup import relatorio_trabalho as nova_func
     return nova_func(request._request)
 
 
@@ -225,5 +225,5 @@ def relatorio_trabalho(request):
 @permission_classes([IsAuthenticated])
 def relatorio_despesas(request):
     """Relatório de despesas - delega para relatorios_dashboard"""
-    from relatorios_dashboard.api_views import relatorio_despesas as nova_func
+    from backend.relatorios_dashboard.__api_viewsBackup import relatorio_despesas as nova_func
     return nova_func(request._request)

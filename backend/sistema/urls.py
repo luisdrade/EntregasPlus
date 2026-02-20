@@ -25,13 +25,16 @@ from usuarios.views import RegisterView, UserDetailView
 urlpatterns = [
     path('admin/', admin.site.urls),
     
-    # Rotas de Autenticação (Login)
+    #? Rotas de Autenticação (Login e Registro)
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'), # Login
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'), # Renovar Token
-    
-    # Rota de Registro
-    path('api/register/', RegisterView.as_view(), name='auth_register'),
-    
+    path('api/register/', RegisterView.as_view(), name='auth_register'), 
     # Rota de Perfil (Para testar se o token funciona)
     path('api/user/', UserDetailView.as_view(), name='user_detail'),
+
+    #? Rotas de Registro
+    path('api/financeiro/', include('registro_entregadespesa.urls')),
+
+    #? Rotas de Relatórios
+    path('api/relatorios', include('relatorios_dashboard.urls')), 
 ]
