@@ -23,7 +23,7 @@ export function AuthPage() {
   //? ESTADO (FRONTEND): Controla o visual e os dados na tela
   const [isLogin, setIsLogin] = useState(location.pathname === "/login");
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setisLoading] = useState(false); //Tela mostrando carregando...
+  const [isLoading, setIsLoading] = useState(false); //Tela mostrando carregando...
 
   const [formData, setFormData] = useState({
     name: "",
