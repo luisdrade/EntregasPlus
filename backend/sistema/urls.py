@@ -36,5 +36,5 @@ urlpatterns = [
     path('api/financeiro/', include('registro_entregadespesa.urls')),
 
     #? Rotas de Relatórios
-    path('api/relatorios', include('relatorios_dashboard.urls')), 
+    path('api/relatorios/', include('relatorios_dashboard.urls')), 
 ]

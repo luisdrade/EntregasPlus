@@ -27,12 +27,12 @@ class EstatisticasUsuarioView(APIView):
             despesa = Despesa.objects.filter(entregador=user, data__range=[data_inicio, data_fim])
 
 #? Agragação feita direto do banco
-            agg_trabalho = trabalhos.aaggregate(
+            agg_trabalho = trabalhos.aggregate(
                 total_ent=Sum('quantidade_entregues'),
                 total_ganho=Sum('valor')
             )
 
-            agg_despesa = despesa.aaggregate(total_desp=Sum('valor'))
+            agg_despesa = despesa.aggregate(total_desp=Sum('valor'))
 
             total_entrega = agg_trabalho['total_ent'] or 0
             total_ganhos =  float(agg_trabalho['total_ganho'] or 0)
@@ -42,18 +42,18 @@ class EstatisticasUsuarioView(APIView):
             dias_conectados = (date.today() - user.date_joined.date()).days if user.date_joined else 0
 
             return Response({
-                'totalEntregas': total_entregas,
+                'totalEntregas': total_entrega,
                 'totalGanhos': round(total_ganhos, 2),
-                'totalDespesas': round(total_despesas, 2),
+                'totalDespesas': round(total_despesa, 2),
                 'lucroLiquido': round(total_ganhos - total_despesa, 2),
-                'veiculosCadastrados': Veiculo.object.filter(entregador=user).count(),
+                #'veiculosCadastrados': Veiculo.object.filter(entregador=user).count(),
                 'diasTrabalhados': dias_trabalhados,
-                'diasConectado': dias_conectado,
+                'diasConectado': dias_conectados,
                 'periodo': {
-                    'inicio': data_inicio_filtro.strftime('%Y-%m-%d'),
-                    'fim': data_fim_filtro.strftime('%Y-%m-%d')
+                    'inicio': data_inicio.strftime('%Y-%m-%d'),
+                    'fim': data_fim.strftime('%Y-%m-%d')
                 },
-                'foto': user.foto.url if getattr(user, 'foto', None) else None
+                'foto': request.build_absolute_uri(user.foto.url) if user.foto else None
             })
         
         except Exception as e:
@@ -72,7 +72,7 @@ def relatorio_trabalho(request):
 
         trabalhos = RegistroTrabalho.objects.filter(entregador=request.user, data__range=[data_inicio, data_fim]).order_by('data')
 
-        agg = trabalhos.aaggregate(
+        agg = trabalhos.aggregate(
             ent_ok=Sum('quantidade_entregues'),
             ent_nok=Sum('quantidade_nao_entregues'),
             ganho=Sum('valor')
