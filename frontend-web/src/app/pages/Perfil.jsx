@@ -17,7 +17,7 @@ import api from '../../services/api'
 
 export function Perfil() {
   const [activeTab, setActiveTab] = useState("dados");
-  const [loading, serLoading] = useState(false); // 'dados', 'seguranca', 'veiculos'
+  const [loading, setLoading] = useState(false); // 'dados', 'seguranca', 'veiculos'
 
   // Estados dos Dados Pessoais
   const [userData, setUserData] = useState({
@@ -257,9 +257,9 @@ export function Perfil() {
                   <input
                     type="password"
                     required
-                    value={passwords.atual}
+                    value={password.atual}
                     onChange={(e) =>
-                      setPasswords({ ...passwords, atual: e.target.value })
+                      setPassword({ ...password, atual: e.target.value })
                     }
                     className="w-full bg-input/50 border border-input rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-primary/50 text-foreground"
                   />
@@ -271,9 +271,9 @@ export function Perfil() {
                   <input
                     type="password"
                     required
-                    value={passwords.nova}
+                    value={password.nova}
                     onChange={(e) =>
-                      setPasswords({ ...passwords, nova: e.target.value })
+                      setPassword({ ...password, nova: e.target.value })
                     }
                     className="w-full bg-input/50 border border-input rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-primary/50 text-foreground"
                   />
@@ -285,9 +285,9 @@ export function Perfil() {
                   <input
                     type="password"
                     required
-                    value={passwords.confirmar}
+                    value={password.confirmar}
                     onChange={(e) =>
-                      setPasswords({ ...passwords, confirmar: e.target.value })
+                      setPassword({ ...password, confirmar: e.target.value })
                     }
                     className="w-full bg-input/50 border border-input rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-primary/50 text-foreground"
                   />
