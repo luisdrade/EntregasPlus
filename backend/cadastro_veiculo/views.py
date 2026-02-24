@@ -1,86 +1,69 @@
-from rest_framework import viewsets, permissions, status
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.decorators import action
+from rest_framework import status
 from .models import Veiculo
-from .serializers import VeiculoSerializer
+import logging
 
-class VeiculoViewSet(viewsets.ModelViewSet):
-    queryset = Veiculo.objects.all()
-    serializer_class = VeiculoSerializer
-    permission_classes = [permissions.IsAuthenticated]
+logger = logging.getLogger(__name__)
 
-    def get_queryset(self):
-        """Retorna apenas os veículos do usuário logado"""
-        return Veiculo.objects.filter(entregador=self.request.user)
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def gerenciar_veiculos(request):
+    """
+    GET: Lista todos os veículos do usuário logado.
+    POST: Cadastra um novo veículo para o usuário logado.
+    """
 
-    def create(self, request, *args, **kwargs):
-        """Cria um novo veículo"""
+    if request.method == 'GET':
+        veiculos = Veiculo.objects.filter(entregador=request.user).order_by('-id')
+        
+        dados = [{ 'id': v.id, 
+                  'tipo': v.tipo, 
+                  'placa': v.placa, 
+                  'modelo': v.modelo,
+                  #!'cor': v.cor
+        } for v in veiculos ]
+
+        return Response({'success': True, 'results': dados})
+    
+    elif request.method == 'POST':
         try:
-            serializer = self.get_serializer(data=request.data, context={'request': request})
-            serializer.is_valid(raise_exception=True)
-            self.perform_create(serializer)
-            
+            data = request.data
+
+            veiculo = Veiculo.objects.create(
+                entregador=request.user,
+                tipo=data.get('tipo','moto'),
+                placa=data.get('placa','').upper(),
+                modelo=data.get('modelo', ''),
+              #!  cor=data.get('cor', '')
+            )
+
             return Response({
-                'success': True,
-                'message': 'Veículo cadastrado com sucesso',
-                'veiculo': serializer.data
+                'success' : True,
+                'message': 'Veiculo cadastrado com sucesso!!',
+                'id': veiculo.id
             }, status=status.HTTP_201_CREATED)
+        
         except Exception as e:
-            return Response({
-                'success': False,
-                'message': f'Erro ao cadastrar veículo: {str(e)}'
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            logger.error(f"Erro ao cadastrar o veiculo: {str(e)}")
+            return Response({'sucess': False, 'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
 
-    def update(self, request, *args, **kwargs):
-        """Atualiza um veículo"""
-        try:
-            instance = self.get_object()
-            serializer = self.get_serializer(instance, data=request.data, partial=True, context={'request': request})
-            serializer.is_valid(raise_exception=True)
-            self.perform_update(serializer)
-            
-            return Response({
-                'success': True,
-                'message': 'Veículo atualizado com sucesso',
-                'veiculo': serializer.data
-            })
-        except Exception as e:
-            return Response({
-                'success': False,
-                'message': f'Erro ao atualizar veículo: {str(e)}'
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+def deletar_veiculo(request, veiculo_id):
+    #deleatar o veiculos especidifcp
 
-    def destroy(self, request, *args, **kwargs):
-        """Remove um veículo"""
-        try:
-            instance = self.get_object()
-            self.perform_destroy(instance)
-            
-            return Response({
-                'success': True,
-                'message': 'Veículo removido com sucesso'
-            })
-        except Exception as e:
-            return Response({
-                'success': False,
-                'message': f'Erro ao remover veículo: {str(e)}'
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    @action(detail=False, methods=['get'])
-    def meus_veiculos(self, request):
-        """Retorna os veículos do usuário logado"""
-        try:
-            veiculos = self.get_queryset()
-            serializer = self.get_serializer(veiculos, many=True)
-            
-            return Response({
-                'success': True,
-                'veiculos': serializer.data
-            })
-        except Exception as e:
-            return Response({
-                'success': False,
-                'message': f'Erro ao buscar veículos: {str(e)}'
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-# View de template removida - usando apenas API
+    try:
+        veiculo = Veiculo.objects.get(id=veiculo_id, entregador=request.user)
+        veiculo.delete()
+        return Response({'success': True, 'message': 'Veículo removido com SUcesso!!'})
+    
+    except Veiculo.DoesNotExist:
+        return Response({
+            'success': False,
+            'erro' : 'Veículo não encontrado'
+        }, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'success': False, 'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

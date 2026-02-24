@@ -37,4 +37,7 @@ urlpatterns = [
 
     #? Rotas de Relatórios
     path('api/relatorios/', include('relatorios_dashboard.urls')), 
+    
+    #? Rotas de Veiculos
+    path('api/veiculos/', include('cadastro_veiculo.urls')),
 ]

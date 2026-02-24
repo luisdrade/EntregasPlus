@@ -5,6 +5,7 @@ import { Dashboard } from "./app/pages/Dashboard";
 import { DashboardLayout } from "./layouts/DashboardLayouts";
 import { Financeiro } from "./app/pages/Financeiro";
 import { Relatorios } from "./app/pages/Relatorios";
+import { Perfil } from "./app/pages/Perfil";
 
 //import { RegisterPage } from "./app/pages/RegisterPage";
 //import { Login } from "./pages/Login";
@@ -37,6 +38,8 @@ function App() {
 
           <Route path="financeiro" element={<Financeiro />} />
           <Route path="relatorios" element={<Relatorios />} />
+          <Route path="perfil" element={<Perfil />} />
+          
         </Route>
       </Routes>
     </BrowserRouter>

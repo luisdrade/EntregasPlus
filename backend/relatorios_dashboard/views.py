@@ -46,7 +46,7 @@ class EstatisticasUsuarioView(APIView):
                 'totalGanhos': round(total_ganhos, 2),
                 'totalDespesas': round(total_despesa, 2),
                 'lucroLiquido': round(total_ganhos - total_despesa, 2),
-                #'veiculosCadastrados': Veiculo.object.filter(entregador=user).count(),
+                'veiculosCadastrados': Veiculo.objects.filter(entregador=user).count(),
                 'diasTrabalhados': dias_trabalhados,
                 'diasConectado': dias_conectados,
                 'periodo': {

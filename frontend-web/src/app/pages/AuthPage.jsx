@@ -53,7 +53,7 @@ export function AuthPage() {
   //? LOGICA DO BACKEND -> vai enviar os dados para o servidor
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setisLoading(true);
+    setIsLoading(true);
 
     try {
       if (isLogin) {
