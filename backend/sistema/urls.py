@@ -20,7 +20,8 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-from usuarios.views import RegisterView, UserDetailView
+from usuarios.views import RegisterView, UserDetailView, ChangePasswordView, UploadFotoPerfilView, check_username
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,6 +32,9 @@ urlpatterns = [
     path('api/register/', RegisterView.as_view(), name='auth_register'), 
     # Rota de Perfil (Para testar se o token funciona)
     path('api/user/', UserDetailView.as_view(), name='user_detail'),
+    path('api/user/change-password/', ChangePasswordView.as_view(), name='change_password'),
+    path('api/user/upload-foto/', UploadFotoPerfilView.as_view(), name='upload_foto'),
+    path('api/user/check/<str:username>/', check_username, name='check_username'),
 
     #? Rotas de Registro
     path('api/financeiro/', include('registro_entregadespesa.urls')),
