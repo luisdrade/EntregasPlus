@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 from datetime import timedelta
 from dotenv import load_dotenv
-#import dj_database_url 
+import dj_database_url 
 
 #para carregar as variaveis do arquivo .env
 load_dotenv()
@@ -16,11 +16,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ==========================================
 #? Parte da Segurança
 # ==========================================
-SECRET_KEY = 'django-insecure-2i=3+vb$*ttsb%&9g7w%2tyi#^qniy-v@ljb)83d8zc!8@8!26'
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+SECRET_KEY = os.getenv('SECRET_KEY')
+DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['*'] # Receber todos os links
-
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOST', '').split(',')
 
 # ==========================================
 #? APlicativos
@@ -90,11 +89,13 @@ WSGI_APPLICATION = 'sistema.wsgi.application'
 #? Banco de Dados
 # =========================================================
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    #? se não houver um PostgreSQL configurado no .env, usa o SQLite local automaticamente. Se houver, muda na hora!
+    'default': dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600,
+        conn_health_checks=True,
+        )
     }
-}
 
 
 # =========================================================
@@ -154,7 +155,7 @@ USE_TZ = True
 #? Estaticos e Mídia (CSS, JavaScript, Images)
 # ========================================================
 STATIC_URL = 'static/'
-STATIC_ROOT =  BASE_DIR /  'staticfiles'
+STATIC_ROOT =  os.path.join(BASE_DIR /  'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
@@ -175,7 +176,8 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # =========================================================
 #? CORS (Para usar em React) 
 # ========================================================
-CORS_ALLOW_ALL_ORIGINS = True 
+CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = os.getenv('CORS_ORIGINS', '').split(',') 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
