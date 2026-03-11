@@ -7,6 +7,8 @@ class Veiculo(models.Model):
     TIPO_CHOICES = [
         ('carro', 'Carro'),
         ('moto', 'Moto'),
+        ('bicicleta', 'Bicicleta'),
+        ('van', 'Van')
     ]
     
     CATEGORIA_CHOICES = [
@@ -17,7 +19,8 @@ class Veiculo(models.Model):
     entregador = models.ForeignKey(Entregador, on_delete=models.CASCADE, related_name='veiculos')
     tipo = models.CharField(max_length=10, choices=TIPO_CHOICES, default='carro')
     modelo = models.CharField(max_length=100)
-    placa = models.CharField(max_length=10, blank=True, null=True)
+    cor = models.CharField(max_length=30, blank=True, null=True)
+    placa = models.CharField(max_length=10, blank=True, null=True, db_index=True)
     categoria = models.CharField(max_length=10, choices=CATEGORIA_CHOICES, default='passeio')
     km_por_l = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
     data_cadastro = models.DateTimeField(auto_now_add=True)

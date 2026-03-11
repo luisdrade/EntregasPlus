@@ -1,5 +1,10 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 
+Entregador = get_user_model()
+
+'''
+#! Apagar essa parte pois mistura uns conceitos
 class RegistroEntregaDespesa(models.Model):
     TIPO_RENDIMENTO_CHOICES = [
         ('unitario', 'Valor Unitário por Pacote'),
@@ -50,28 +55,33 @@ class RegistroEntregaDespesa(models.Model):
 
     def calcular_lucro(self):
         return self.calcular_ganho() - self.valor_despesa
-
+'''
 class RegistroTrabalho(models.Model):
     """Modelo para registro de dia de trabalho"""
     TIPO_PAGAMENTO_CHOICES = [
-        ('unitario', 'Valor Unitário por Pacote'),
+        ('por_entrega', 'Por entrega'),
         ('diaria', 'Valor por Diária'),
         ('por_hora', 'Valor por Hora'),
         ('fixo', 'Valor Fixo'),
     ]
 
+    
+    entregador = models.ForeignKey(Entregador, on_delete=models.CASCADE, related_name='registros_trabalho')
     data = models.DateField()
     hora_inicio = models.TimeField()
     hora_fim = models.TimeField()
-    quantidade_entregues = models.PositiveIntegerField()
-    quantidade_nao_entregues = models.PositiveIntegerField()
-    tipo_pagamento = models.CharField(max_length=20, choices=TIPO_PAGAMENTO_CHOICES)
+    quantidade_entregues = models.PositiveIntegerField(default=0)
+    quantidade_nao_entregues = models.PositiveIntegerField(default=0)
+    tipo_pagamento = models.CharField(max_length=20, choices=TIPO_PAGAMENTO_CHOICES, default='diaria')
+
     valor = models.DecimalField(max_digits=8, decimal_places=2)
-    entregador = models.ForeignKey('usuarios.Entregador', on_delete=models.CASCADE)
     data_criacao = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['-data', '-hora_inicio']
+        indexes = [ # Pesquisa por data vai ser instantanea
+            models.Index(fields=['entregador', 'data']),
+        ]
 
     def __str__(self):
         return f"Trabalho {self.data} - {self.entregador.nome}"
@@ -91,9 +101,9 @@ class RegistroTrabalho(models.Model):
 
 class CategoriaDespesa(models.Model):
     """Modelo para categorias personalizadas de despesas"""
+    entregador = models.ForeignKey(Entregador, on_delete=models.CASCADE, related_name='categorias_despesa')
     nome = models.CharField(max_length=50)
     descricao = models.TextField(blank=True, null=True)
-    entregador = models.ForeignKey('usuarios.Entregador', on_delete=models.CASCADE)
     data_criacao = models.DateTimeField(auto_now_add=True)
     ativa = models.BooleanField(default=True)
 

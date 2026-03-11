@@ -18,39 +18,33 @@ class UsuarioManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 class Entregador(AbstractBaseUser, PermissionsMixin):
-    nome = models.CharField(max_length=100)
+    #? Dados Pessoais
+    nome = models.CharField(max_length=100, db_index=True)
     cpf = models.CharField(max_length=14, unique=True, null=True, blank=True)
     telefone = models.CharField(max_length=20, null=True, blank=True)
+    data_nascimento = models.DateField(null=True, blank=True)
+    foto = models.ImageField(upload_to='fotos_perfil/', null=True, blank=True)
+
+    #? Autenticação
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=150, unique=True, blank=True, null=True)
-    data_nascimento = models.DateField(null=True, blank=True)
     
+    #?endereço
     endereco = models.CharField(max_length=200, null=True, blank=True)
     cep = models.CharField(max_length=10, null=True, blank=True)
     cidade = models.CharField(max_length=100, null=True, blank=True)
     estado = models.CharField(max_length=2, null=True, blank=True)
 
-    # Campo de foto
-    foto = models.ImageField(upload_to='fotos_perfil/', null=True, blank=True)
 
-    # Validação de email (apenas para web)
+    #? Validação de email (apenas para web)
     email_validado = models.BooleanField(default=False)
-    email_codigo_validacao = models.CharField(max_length=6, null=True, blank=True)
-    email_codigo_expira_em = models.DateTimeField(null=True, blank=True)
+    registration_verified = models.BooleanField(default=False)  # Indica se completou verificação pós-cadastro
 
-    # Autenticação de 2 fatores via email
     two_factor_enabled = models.BooleanField(default=False)
     two_factor_required = models.BooleanField(default=False)  # Se deve pedir 2FA no próximo login
     last_2fa_check = models.DateTimeField(null=True, blank=True)  # Última verificação 2FA
 
-    # Verificação pós-cadastro
-    registration_verified = models.BooleanField(default=False)  # Indica se completou verificação pós-cadastro
-    registration_code = models.CharField(max_length=6, null=True, blank=True)  # Código temporário de verificação
-    registration_code_expires_at = models.DateTimeField(null=True, blank=True)  # Expiração do código
-    registration_code_attempts = models.IntegerField(default=0)  # Contador de tentativas de reenvio
-    registration_code_blocked_until = models.DateTimeField(null=True, blank=True)  # Bloqueio temporário por excesso de tentativas
-
-    # Campos de sistema
+    #? Campos de sistema
     date_joined = models.DateTimeField(default=django.utils.timezone.now)
     last_login = models.DateTimeField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
@@ -59,36 +53,43 @@ class Entregador(AbstractBaseUser, PermissionsMixin):
     objects = UsuarioManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['nome', 'telefone', 'username']
+    REQUIRED_FIELDS = ['nome', 'telefone']
 
     def __str__(self):
         return self.email
 
-class TwoFactorVerification(models.Model):
+class CodigoVerificacao(models.Model):
     """
-    Modelo para armazenar códigos de verificação temporários do 2FA via email
+    Modelo ÚNICO para gerir todos os códigos temporários do sistema.
     """
-    user = models.ForeignKey(Entregador, on_delete=models.CASCADE, related_name='two_factor_verifications')
+    TIPOS_CODIGO = [
+        ('login_2fa', 'Login 2FA'),
+        ('validacao_email', 'Validação de E-mail'),
+        ('recuperacao_senha', 'Recuperação de Senha'),
+        ('setup_2fa', 'Configuração 2FA')
+    ]
+
+    user = models.ForeignKey(Entregador, on_delete=models.CASCADE, related_name='codigos_seguranca')
     code = models.CharField(max_length=6)
+    purpose = models.CharField(max_length=20, choices=TIPOS_CODIGO, default='login_2fa')
+    
+    is_used = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     expires_at = models.DateTimeField()
-    is_used = models.BooleanField(default=False)
-    purpose = models.CharField(max_length=20, default='login', choices=[
-        ('login', 'Login'),
-        ('setup', 'Setup'),
-        ('disable', 'Disable')
-    ])
+    
+    # Proteção contra hackers/Spam (Brute Force)
+    tentativas = models.IntegerField(default=0)
+    bloqueado_ate = models.DateTimeField(null=True, blank=True)
     
     class Meta:
         ordering = ['-created_at']
     
     def __str__(self):
-        return f"2FA Code for {self.user.email} - {self.code} ({self.purpose})"
+        return f"Código ({self.get_purpose_display()}) para {self.user.email} - {self.code}"
     
     def is_expired(self):
         from django.utils import timezone
         return timezone.now() > self.expires_at
-
 class TrustedDevice(models.Model):
     """
     Modelo para dispositivos confiáveis que não precisam de 2FA

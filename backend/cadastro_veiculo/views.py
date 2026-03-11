@@ -22,7 +22,7 @@ def gerenciar_veiculos(request):
                   'tipo': v.tipo, 
                   'placa': v.placa, 
                   'modelo': v.modelo,
-                  #!'cor': v.cor
+                  'cor': v.cor
         } for v in veiculos ]
 
         return Response({'success': True, 'results': dados})
@@ -36,7 +36,7 @@ def gerenciar_veiculos(request):
                 tipo=data.get('tipo','moto'),
                 placa=data.get('placa','').upper(),
                 modelo=data.get('modelo', ''),
-              #!  cor=data.get('cor', '')
+                cor=data.get('cor', '')
             )
 
             return Response({
