@@ -176,8 +176,8 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # =========================================================
 #? CORS (Para usar em React) 
 # ========================================================
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True
-#CORS_ALLOWED_ORIGINS = os.getenv('CORS_ORIGINS', '').split(',') 
+CORS_ALLOWED_ORIGINS = os.getenv('CORS_ORIGINS', '').split(',') 
 
 #DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

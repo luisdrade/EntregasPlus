@@ -58,7 +58,7 @@ export function AuthPage() {
     try {
       if (isLogin) {
         //* --- LOGIN --- (acessa o /api/token)
-        const response = await api.post("/token/", {
+        const response = await api.post("/api/token/", {
           email: formData.email,
           password: formData.password,
         });
@@ -80,7 +80,7 @@ export function AuthPage() {
           return;
         }
 
-        await api.post("/register/", {
+        await api.post("/api/register/", {
           name: formData.name,
           email: formData.email,
           password: formData.password,
