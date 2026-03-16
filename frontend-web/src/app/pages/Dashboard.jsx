@@ -40,7 +40,7 @@ export function Dashboard() {
       try {
         setLoading(true);
 
-        const respStas = await api.get("/relatorios/estatisticas/?periodo=mes");
+        const respStas = await api.get("/api/relatorios/estatisticas/?periodo=mes");
         setStatsData(respStas.data);
 
         const respTrabalhos = await api.get("/api/financeiro/trabalho/");
