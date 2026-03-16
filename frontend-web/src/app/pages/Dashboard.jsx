@@ -44,12 +44,16 @@ export function Dashboard() {
         setStatsData(respStas.data);
 
         const respTrabalhos = await api.get("/api/financeiro/trabalho/");
-        const entregas = respTrabalhos.data.result || respTrabalhos.data;
-        setUltimasEntregas(entregas.slice(0, 4));
+        const arrayEntregas = Array.isArray(respTrabalhos.data) 
+          ? respTrabalhos.data 
+          : (respTrabalhos.data?.results || []);        
+        setUltimasEntregas(arrayEntregas.slice(0, 4));
 
         const respDespesas = await api.get("/api/financeiro/despesa/");
-        const despesas = respDespesas.data.result || respDespesas.data;
-        setUltimasDespesas(despesas.slice(0,4));
+        const arrayDespesas = Array.isArray(respDespesas.data) 
+          ? respDespesas.data 
+          : (respDespesas.data?.results || []);
+        setUltimasDespesas(arrayDespesas.slice(0,4));
 
 
       } catch (error) {
