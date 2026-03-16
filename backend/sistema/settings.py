@@ -88,13 +88,24 @@ WSGI_APPLICATION = 'sistema.wsgi.application'
 # =========================================================
 #? Banco de Dados
 # =========================================================
-DATABASES = {
-    #? se não houver um PostgreSQL configurado no .env, usa o SQLite local automaticamente. Se houver, muda na hora!
-    'default': dj_database_url.config(
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
-        conn_max_age=600,
-        conn_health_checks=True,
+# O Render cria a variável 'RENDER' automaticamente. 
+# Se ela existir, sabemos que estamos na nuvem!
+if os.environ.get('RENDER'):
+    print("🌍 Rodando no Render: Usando PostgreSQL do Neon!")
+    DATABASES = {
+        'default': dj_database_url.config(
+            # Se não achar o link, ele vai dar erro de propósito para nós vermos!
+            conn_max_age=600,
+            conn_health_checks=True,
         )
+    }
+else:
+    print("💻 Rodando no PC: Usando SQLite local!")
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
 
 
