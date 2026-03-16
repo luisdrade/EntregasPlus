@@ -40,7 +40,7 @@ export function Financeiro() {
     setLoading(true);
     try {
       // Ajuste o endpoint conforme o teu backend (ex: /registro-trabalho/)
-      await api.post("financeiro/trabalho/", ganhoForm);
+      await api.post("/api/financeiro/trabalho/", ganhoForm);
       alert("Dia de trabalho registrado com sucesso! 🚀");
 
       //Limpa os campos
@@ -58,7 +58,7 @@ export function Financeiro() {
     e.preventDefault();
     setLoading(true);
     try {
-      await api.post("/financeiro/despesa/", despesaForm);
+      await api.post("/api/financeiro/despesa/", despesaForm);
       alert("Despesa registrada com sucesso! 💸");
 
       // Limpa os campos

@@ -43,11 +43,11 @@ export function Dashboard() {
         const respStas = await api.get("/relatorios/estatisticas/?periodo=mes");
         setStatsData(respStas.data);
 
-        const respTrabalhos = await api.get("/financeiro/trabalho/");
+        const respTrabalhos = await api.get("/api/financeiro/trabalho/");
         const entregas = respTrabalhos.data.result || respTrabalhos.data;
         setUltimasEntregas(entregas.slice(0, 4));
 
-        const respDespesas = await api.get("/financeiro/despesa/");
+        const respDespesas = await api.get("/api/financeiro/despesa/");
         const despesas = respDespesas.data.result || respDespesas.data;
         setUltimasDespesas(despesas.slice(0,4));
 
