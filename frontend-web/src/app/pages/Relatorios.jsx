@@ -14,7 +14,7 @@ export function Relatorios() {
         setLoading(true);
         //
         const response = await api.get(
-          `/relatorios/estatisticas/?periodo=${periodo}`,
+          `/api/relatorios/estatisticas/?periodo=${periodo}`,
         );
         setDados(response.data);
       } catch (error) {
