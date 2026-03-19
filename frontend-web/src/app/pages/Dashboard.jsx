@@ -43,18 +43,20 @@ export function Dashboard() {
         const respStas = await api.get("/api/relatorios/estatisticas/?periodo=mes");
         setStatsData(respStas.data);
 
+        // 2. Pega os trabalhos/entregas com verificação de segurança
         const respTrabalhos = await api.get("/api/financeiro/trabalho/");
+        // Descobre se é uma lista direta ou se está dentro de ".results"
         const arrayEntregas = Array.isArray(respTrabalhos.data) 
           ? respTrabalhos.data 
           : (respTrabalhos.data?.results || []);        
         setUltimasEntregas(arrayEntregas.slice(0, 4));
 
+        // 3. Pega as despesas com verificação de segurança
         const respDespesas = await api.get("/api/financeiro/despesa/");
         const arrayDespesas = Array.isArray(respDespesas.data) 
           ? respDespesas.data 
           : (respDespesas.data?.results || []);
         setUltimasDespesas(arrayDespesas.slice(0,4));
-
 
       } catch (error) {
         console.error("Erro ao carregar dashboard", error);
