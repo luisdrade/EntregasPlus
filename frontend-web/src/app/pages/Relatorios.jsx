@@ -101,7 +101,7 @@ export function Relatorios() {
 
   const handleSalvarEdicao = async (e) =>{
     e.preventDefault();
-    serSalvarEdicao(true);
+    setSalvarEdicao(true);
     try{
       if (tipoEdicao === 'ganho') {
         await api.put(`/api/financeiro/trabalho/${itemEmEdicao.id}/`, itemEmEdicao);
@@ -115,7 +115,7 @@ export function Relatorios() {
       console.error("Erro ao atualizar", error);
       alert("Erro ao salvar as alterações.");
     } finally{
-      serSalvandoEdicao(false);
+      setSalvandoEdicao(false);
     }
   };
 
