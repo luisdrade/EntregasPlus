@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import React from "react";
 import api from "../../services/api";
-import { Calendar, Trash2, Edit2, TrendingUp, TrendingDown } from "lucide-react";
-
+import { Calendar, Trash2, Edit2, TrendingUp, TrendingDown, X, Save } from "lucide-react";
 export function Relatorios() {
   const [periodo, setPeriodo] = useState("mes");
   const [dados, setDados] = useState(null);
